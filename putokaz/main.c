@@ -7,11 +7,13 @@
 //fseek itd (18.), (19.), upravljanje errorima (20.),  (23.), def jednostruko povezana lista
 
 //biljeske: koristi const!, staticko polje, malloc != calloc, mozda implementirati 
-//pravu rekurziju
+//pravu rekurziju, mozda premjesti strukture u svoj header
 
 
 int main() {
 	main_menu();
 
+	DESTINATION destination1;
+
 	return 0;
-}
+} 
