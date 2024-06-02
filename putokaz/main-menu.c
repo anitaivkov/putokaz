@@ -9,10 +9,10 @@ enum menu_items {
 	DODAVANJE_UPOZORENJA,	//4. izbor
 	ISPIS_DEST,			//5. izbor
 	BRISANJE_DEST,		//6. izbor
-	IZLAZ_IZ_PROGRAMA
+	IZLAZ_IZ_PROGRAMA	//7.izbor
 };
 
-int main_menu(char* destinations_file, char* traveler_file) {
+int main_menu(char* dest_file, char* traveler_file) {
 	printf("\t=====================================\t\t");
 	printf("\n\t\t======\tPUTOKAZ\t======\t\t\n");
 	printf("\n\t\t1. Odabir destinacije\t\t\n");
@@ -37,9 +37,7 @@ int main_menu(char* destinations_file, char* traveler_file) {
 		break;
 
 	case DODAVANJE_DEST:
-		printf("\nJa sam 2. izbor.\n");
-		//dodavanje destinacija u datoteku destinations.txt
-		//dodaj redni broj destinacije u datoteku!!!
+		add_destination(dest_file);
 		break;
 
 	case AZURIRANJE_DEST:
@@ -56,7 +54,7 @@ int main_menu(char* destinations_file, char* traveler_file) {
 		break;
 
 	case ISPIS_DEST:
-		printf("\nJa sam 5. izbor.\n");
+		read_destinations(dest_file);
 
 		//izbor: zeli li korisnik ispis samo jedne destinacije ili vise; 
 		//ako zeli odreden broj ispisanih destinacija --> previse posla!
@@ -72,6 +70,10 @@ int main_menu(char* destinations_file, char* traveler_file) {
 
 	case IZLAZ_IZ_PROGRAMA:
 		return 0;
+		break;
+
+	default:
+		main_choice = 0;
 	}
 
 	return 0;
