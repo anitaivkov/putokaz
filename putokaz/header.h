@@ -18,6 +18,7 @@ typedef struct destination {
 }DESTINATION;
 
 
+void dest_print_question();
 
 int main_menu();
 
