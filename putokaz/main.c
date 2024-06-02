@@ -12,13 +12,14 @@
 int main() {
 
 	//stvaranje datoteke
-	FILE* fp_dest = fopen("destinations.bin", "ab+");
-	FILE* fp_traveler = fopen("traveler.bin", "ab+");
+	char dest_file[] = "destinations.bin";
+	char traveler_file[] = "traveler.bin";
+
+	create_file(dest_file);
 
 	int condition = 1;
 	while (condition) {
-		main_menu();
-
+		condition = main_menu(dest_file, traveler_file);
 	}
 
 	return 0;
