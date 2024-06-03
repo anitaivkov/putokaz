@@ -42,25 +42,25 @@ void add_destination(const char* dest_file) {
 
 
 	printf("Unesite naziv destinacije: ");
-	scanf("%49s", dest.location.name);
+	scanf(" %49[^\n]%*c", dest.location.name);				//prima razmake u unosu
 	printf("Unesite drzavu: ");
-	scanf("%49s", dest.location.country);
+	scanf(" %49[^\n]%*c", dest.location.country);			//prima razmake u unosu
 	printf("Unesite kontinent: ");
-	scanf("%49s", dest.location.continent);
-	printf("Unesite udaljenost: ");
+	scanf(" %49[^\n]%*c", dest.location.continent);	//prima razmake u unosu
+	printf("Unesite udaljenost (u kilometrima): ");
 	scanf("%f", &dest.location.distance);
-	printf("Unesite cijenu: ");
+	printf("Unesite cijenu (u eurima): ");
 	scanf("%f", &dest.cost);
 	printf("Unesite prijevozna sredstva: ");
-	scanf("%49s", dest.travel_option);
+	scanf(" %49[^\n]%*c", dest.travel_option);				//prima razmake u unosu
 	printf("Unesite sezonu: ");
 	scanf("%49s", dest.season);
-	printf("Unesite popularnost: ");
+	printf("Unesite popularnost (u postotcima): ");
 	scanf("%d", &dest.popularity);
 	printf("Unesite upozorenja: ");
-	scanf(" %255[^\n]%*c", dest.warnings);  
+	scanf(" %255[^\n]%*c", dest.warnings);			//prima razmake u unosu
 	printf("Unesite atrakcije: ");
-	scanf(" %255[^\n]%*c", dest.attractions);  
+	scanf(" %255[^\n]%*c", dest.attractions);		//prima razmake u unosu
 
 	FILE* fp = fopen(dest_file, "ab");
 	if (fp == NULL) {
@@ -84,8 +84,8 @@ void read_destinations(const char* dest_file) {
 	DESTINATION dest;
 
 
-	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1); {
-		printf("ID: %d\n", dest.id);
+	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
+		printf("\nID: %d\n", dest.id);
 		printf("Naziv destinacije: %s\n", dest.location.name);
 		printf("Drzava: %s\n", dest.location.country);
 		printf("Kontinent: %s\n", dest.location.continent);
@@ -104,7 +104,7 @@ void read_destinations(const char* dest_file) {
 void dest_print_question() {
 	char choice = 0;
 	do {
-		printf("\nZelite li prije odabira destinacije ispisati sve dostupne destinacije? (Y/N)\n");
+		printf("\nZelite li prije odabira destinacije ispisati sve dostupne destinacije? (Y/N): ");
 		scanf(" %c", &choice);
 		if (choice == 'Y' || choice == 'y') {
 			read_destinations("destinations.bin");
