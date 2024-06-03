@@ -6,10 +6,9 @@ enum menu_items {
 	ODABIR_DEST = 1,	//1. izbor
 	DODAVANJE_DEST,		//2. izbor
 	AZURIRANJE_DEST,	//3. izbor
-	DODAVANJE_UPOZORENJA,	//4. izbor
-	ISPIS_DEST,			//5. izbor
-	BRISANJE_DEST,		//6. izbor
-	IZLAZ_IZ_PROGRAMA	//7.izbor
+	ISPIS_DEST,			//4. izbor
+	BRISANJE_DEST,		//5. izbor
+	IZLAZ_IZ_PROGRAMA	//6.izbor
 };
 
 int main_menu(char* dest_file, char* traveler_file) {
@@ -20,9 +19,9 @@ int main_menu(char* dest_file, char* traveler_file) {
 		printf("\n\t\t2. Dodavanje destinacije\t\t\n");
 		printf("\n\t\t3. Azuriranje destinacije\t\t\n");
 		printf("\n\t\t4. Dodavanje upozorenja za destinaciju\t\t\n");
-		printf("\n\t\t5. Ispis destinacije/a\t\t\n");
-		printf("\n\t\t6. Brisanje destinacije/a\t\t\n");
-		printf("\n\t\t7. Izlaz iz programa/a\t\t\n");
+		printf("\n\t\t5. Ispis destinacija\t\t\n");
+		printf("\n\t\t6. Brisanje destinacije\t\t\n");
+		printf("\n\t\t7. Izlaz iz programa\t\t\n");
 		printf("\t=====================================\t\t\n");
 
 		int main_choice = 0;
@@ -45,20 +44,10 @@ int main_menu(char* dest_file, char* traveler_file) {
 			dest_print_question();
 			printf("\nJa sam 3. izbor.\n");
 			//izmjena nekog podatka u strukturi DESTINATION
-			break;
-
-		case DODAVANJE_UPOZORENJA:
-			dest_print_question();
-			printf("\nJa sam 4. izbor.\n");
-			//dodavanje upzorenja kao string u destination.warning
-			//MOZDA: staviti nekakvu povezanu listu ili još jednu ugnijezdenu strukturu
-			break;
+			break; 
 
 		case ISPIS_DEST:
 			read_destinations(dest_file);
-
-			//izbor: zeli li korisnik ispis samo jedne destinacije ili vise; 
-			//ako zeli odreden broj ispisanih destinacija --> previse posla!
 			break;
 
 		case BRISANJE_DEST:

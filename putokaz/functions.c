@@ -3,8 +3,8 @@
 #include <string.h>
 #include "header.h"
 
-static int dest_id = 0;
 
+//kreiranje datoteke
 int create_file(const char* const file_name) {
 	FILE* fp = fopen(file_name, "ab+");
 	if (fp == NULL) {
@@ -16,16 +16,17 @@ int create_file(const char* const file_name) {
 	return 0;
 }
 
-
+//dodjela id-a destinaciji
 int get_id(const char* dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 	if (fp == NULL) {
 		return 1;
 	}
 
+
 	DESTINATION dest;
 
-	//int max_id = 0;
+	int dest_id = 0;
 	while (fread(&dest, sizeof(DESTINATION), 1, fp)) {
 		if (dest.id > dest_id) {
 			dest_id = dest.id;
@@ -35,6 +36,7 @@ int get_id(const char* dest_file) {
 	return dest_id + 1;
 }
 
+//unos destinacije i upis u datoteku destinations.bin
 void add_destination(const char* dest_file) {
 	DESTINATION dest;
 
@@ -46,13 +48,13 @@ void add_destination(const char* dest_file) {
 	printf("Unesite drzavu: ");
 	scanf(" %49[^\n]%*c", dest.location.country);			//prima razmake u unosu
 	printf("Unesite kontinent: ");
-	scanf(" %49[^\n]%*c", dest.location.continent);	//prima razmake u unosu
+	scanf(" %49[^\n]%*c", dest.location.continent);			//prima razmake u unosu
 	printf("Unesite udaljenost (u kilometrima): ");
 	scanf("%f", &dest.location.distance);
 	printf("Unesite cijenu (u eurima): ");
 	scanf("%f", &dest.cost);
 	printf("Unesite prijevozna sredstva: ");
-	scanf(" %49[^\n]%*c", dest.travel_option);				//prima razmake u unosu
+	scanf(" %49[^\n]%*c", dest.travel_option);			//prima razmake u unosu
 	printf("Unesite sezonu: ");
 	scanf("%49s", dest.season);
 	printf("Unesite popularnost (u postotcima): ");
@@ -73,16 +75,15 @@ void add_destination(const char* dest_file) {
 	return;
 }
 
+//citanje destinacija iz datoteke i ispis na ekran
 void read_destinations(const char* dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 	if (fp == NULL) {
 		perror("Greska pri otvaranju datoteke za citanje: ");
 		return;
 	}
-	rewind(fp);
 
 	DESTINATION dest;
-
 
 	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
 		printf("\nID: %d\n", dest.id);
@@ -94,23 +95,24 @@ void read_destinations(const char* dest_file) {
 		printf("Prijevozna sredstva: %s\n", dest.travel_option);
 		printf("Sezona: %s\n", dest.season);
 		printf("Popularnost: %d\n", dest.popularity);
-		printf("Upozorenja: %s\n", dest.warnings);
+		//printf("Upozorenja: %s\n", dest.warnings);
 		printf("Atrakcije: %s\n\n", dest.attractions);
 	}
 	fclose(fp);
 }
 
-
+//pitanje zeli li korisnik ispis svih destinacija
 void dest_print_question() {
 	char choice = 0;
 	do {
 		printf("\nZelite li prije odabira destinacije ispisati sve dostupne destinacije? (Y/N): ");
 		scanf(" %c", &choice);
+		while (getchar() != '\n');	//brisanje starih podataka iz medjuspremnika
+
 		if (choice == 'Y' || choice == 'y') {
 			read_destinations("destinations.bin");
 		}
-	} while (choice != 'Y', choice != 'y', choice != 'N', choice != 'n');
+	} while (choice != 'Y' && choice != 'y' && choice != 'N' && choice != 'n');
 }
-
 
 
