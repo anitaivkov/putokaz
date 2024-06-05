@@ -2,16 +2,20 @@
 #include <stdio.h>
 #include "header.h"
 
+extern int dest_id;
+
 enum menu_items {
 	ODABIR_DEST = 1,	//1. izbor
 	DODAVANJE_DEST,		//2. izbor
 	AZURIRANJE_DEST,	//3. izbor
 	ISPIS_DEST,			//4. izbor
 	BRISANJE_DEST,		//5. izbor
-	IZLAZ_IZ_PROGRAMA	//6.izbor
+	IZLAZ_IZ_PROGRAMA	//6. izbor
 };
 
 int main_menu(char* dest_file, char* traveler_file) {
+	dest_id = get_id(dest_file);
+
 	while (1) {
 		printf("\t=====================================\t\t");
 		printf("\n\t\t======\tPUTOKAZ\t======\t\t\n");
@@ -25,19 +29,23 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		int main_choice = 0;
 
+
+		printf("\nKontolni dest_id koji je u main-menu.c: %d\n", dest_id);
+
 		printf("Unesite svoj odabir: ");
 		scanf("%d", &main_choice);
+
+		static DESTINATION* dest_field = NULL;
 
 		switch (main_choice) {
 		case ODABIR_DEST:
 			dest_print_question();
 			//sva pitanja za sortiranje kroz destinacije
 			//odgovore na pitanja spremam u traveler
-			static DESTINATION* dest_field = NULL;
 
 			dest_field = (DESTINATION*)read_dest_to_field(dest_file);
 
-			//delociraj memoriju!
+			//dealociraj memoriju!
 			break;
 
 		case DODAVANJE_DEST:

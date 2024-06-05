@@ -8,6 +8,9 @@
 //biljeske: koristi const!, staticko polje, malloc != calloc, mozda implementirati 
 //pravu rekurziju, mozda premjesti strukture u svoj header
 
+//NE RADI ID--> POPRAVI GA
+
+int dest_id = 0;
 
 int main() {
 

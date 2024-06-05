@@ -1,6 +1,8 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+extern int dest_id;
+
 typedef struct location {
 	char name[50];
 	char country[50];

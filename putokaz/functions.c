@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "header.h"
 
-static int dest_id = 0;
+extern int dest_id;
 
 //kreiranje datoteke
 int create_file(const char* const file_name) {
@@ -22,29 +22,34 @@ int create_file(const char* const file_name) {
 int get_id(const char* dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 	if (fp == NULL) {
-		return 1;
+		return 0;
 	}
-
 
 	DESTINATION dest;
+	//int max_id = 0;
+	int counter = 0;
 
 	while (fread(&dest, sizeof(DESTINATION), 1, fp)) {
-		if (dest.id > dest_id) {
-			dest_id = dest.id;
-		}
+		//if (dest.id > max_id) {
+		//	max_id = dest.id;
+		//}
+		counter++;
 	}
-	dest_id++;
-
 	fclose(fp);
-	return dest_id;
+
+	if (counter == 0) {
+		return 0;
+	}
+	dest_id = counter;
+	return counter;
 }
+
 
 //unos destinacije i upis u datoteku destinations.bin
 void add_destination(const char* dest_file) {
 	DESTINATION dest;
 
 	dest.id = get_id(dest_file);
-
 
 	printf("Unesite naziv destinacije: ");
 	scanf(" %49[^\n]%*c", dest.location.name);				//prima razmake u unosu
@@ -74,6 +79,7 @@ void add_destination(const char* dest_file) {
 	}
 
 	fwrite(&dest, sizeof(DESTINATION), 1, fp);
+	get_id(dest_file);
 	fclose(fp);
 	return;
 }
