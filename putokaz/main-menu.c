@@ -18,10 +18,9 @@ int main_menu(char* dest_file, char* traveler_file) {
 		printf("\n\t\t1. Odabir destinacije\t\t\n");
 		printf("\n\t\t2. Dodavanje destinacije\t\t\n");
 		printf("\n\t\t3. Azuriranje destinacije\t\t\n");
-		printf("\n\t\t4. Dodavanje upozorenja za destinaciju\t\t\n");
-		printf("\n\t\t5. Ispis destinacija\t\t\n");
-		printf("\n\t\t6. Brisanje destinacije\t\t\n");
-		printf("\n\t\t7. Izlaz iz programa\t\t\n");
+		printf("\n\t\t4. Ispis destinacija\t\t\n");
+		printf("\n\t\t5. Brisanje destinacije\t\t\n");
+		printf("\n\t\t6. Izlaz iz programa\t\t\n");
 		printf("\t=====================================\t\t\n");
 
 		int main_choice = 0;
@@ -33,7 +32,12 @@ int main_menu(char* dest_file, char* traveler_file) {
 		case ODABIR_DEST:
 			dest_print_question();
 			//sva pitanja za sortiranje kroz destinacije
-			//odgovore na pitanja spremam u traveler, ali i u jednostruko povezanu listu
+			//odgovore na pitanja spremam u traveler
+			static DESTINATION* dest_field = NULL;
+
+			dest_field = (DESTINATION*)read_dest_to_field(dest_file);
+
+			//delociraj memoriju!
 			break;
 
 		case DODAVANJE_DEST:
@@ -59,6 +63,8 @@ int main_menu(char* dest_file, char* traveler_file) {
 			break;
 
 		case IZLAZ_IZ_PROGRAMA:
+			free(dest_field);
+
 			return 0;
 			break;
 

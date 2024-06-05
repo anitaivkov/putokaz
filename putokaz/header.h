@@ -25,6 +25,7 @@ int get_id(const char* dest_file);
 void add_destination(const char* dest_file);
 void read_destinations(const char* dest_file);
 void dest_print_question();
+void* read_dest_to_field(const char* const dest_file);
 
 
 #endif // HEADER_H

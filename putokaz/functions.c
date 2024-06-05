@@ -1,8 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "header.h"
 
+static int dest_id = 0;
 
 //kreiranje datoteke
 int create_file(const char* const file_name) {
@@ -26,14 +28,15 @@ int get_id(const char* dest_file) {
 
 	DESTINATION dest;
 
-	int dest_id = 0;
 	while (fread(&dest, sizeof(DESTINATION), 1, fp)) {
 		if (dest.id > dest_id) {
 			dest_id = dest.id;
 		}
 	}
+	dest_id++;
+
 	fclose(fp);
-	return dest_id + 1;
+	return dest_id;
 }
 
 //unos destinacije i upis u datoteku destinations.bin
@@ -115,4 +118,21 @@ void dest_print_question() {
 	} while (choice != 'Y' && choice != 'y' && choice != 'N' && choice != 'n');
 }
 
+void* read_dest_to_field(const char* const dest_file) {
+	FILE* fp = fopen(dest_file, "rb");
+	if (fp == NULL) {
+		perror("Greska pri otvaranju datoteke za ucitavanje u polje: ");
+		exit(EXIT_FAILURE);
+	}
 
+	DESTINATION* dest_field = (DESTINATION*)calloc(dest_id, sizeof(DESTINATION));
+
+	if (dest_field == NULL) {
+		perror("Greska u dinamicki alociranoj memoriji za destinacije: ");
+		exit(EXIT_FAILURE);
+	}
+
+	fread(dest_field, sizeof(DESTINATION), dest_id, fp);
+
+	return dest_field;
+}
