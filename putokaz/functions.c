@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "header.h"
 
-extern int dest_id = 0;
+static int dest_id = 0;
 
 //kreiranje datoteke
 int create_file(const char* const file_name) {
@@ -13,8 +13,6 @@ int create_file(const char* const file_name) {
 		perror("Greska pri kreiranju datoteke: ");
 		return -1;
 	}
-
-	fwrite(&dest_id, sizeof(int), 1, fp);
 
 	fclose(fp);
 	return 0;
@@ -27,6 +25,7 @@ int get_id(const char* dest_file) {
 		return 1;
 	}
 
+
 	DESTINATION dest;
 
 	while (fread(&dest, sizeof(DESTINATION), 1, fp)) {
@@ -34,22 +33,18 @@ int get_id(const char* dest_file) {
 			dest_id = dest.id;
 		}
 	}
-	
+	dest_id++;
+
 	fclose(fp);
 	return dest_id;
 }
 
 //unos destinacije i upis u datoteku destinations.bin
 void add_destination(const char* dest_file) {
-	FILE* fp = fopen(dest_file, "ab");
-	if (fp == NULL) {
-		perror("Greska pri otvaranju datoteke za pisanje: ");
-		return;
-	}
-	DESTINATION dest = { 0 };
+	DESTINATION dest;
 
-	//dest.id = get_id(dest_file);
-	fread(&dest_id, sizeof(int), 1, fp);
+	dest.id = get_id(dest_file);
+
 
 	printf("Unesite naziv destinacije: ");
 	scanf(" %49[^\n]%*c", dest.location.name);				//prima razmake u unosu
@@ -72,11 +67,11 @@ void add_destination(const char* dest_file) {
 	printf("Unesite atrakcije: ");
 	scanf(" %255[^\n]%*c", dest.attractions);		//prima razmake u unosu
 
-	fseek(fp, sizeof(DESTINATION) * dest_id, SEEK_CUR);
-	fwrite(&dest, sizeof(DESTINATION), 1, fp);
-	rewind(fp);
-	dest_id++;
-	fwrite(&dest_id, sizeof(int), 1, fp);
+	FILE* fp = fopen(dest_file, "ab");
+	if (fp == NULL) {
+		perror("Greska pri otvaranju datoteke za pisanje: ");
+		return;
+	}
 
 	fwrite(&dest, sizeof(DESTINATION), 1, fp);
 	fclose(fp);
@@ -88,11 +83,10 @@ void read_destinations(const char* dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 	if (fp == NULL) {
 		perror("Greska pri otvaranju datoteke za citanje: ");
-		exit(EXIT_FAILURE);
+		return;
 	}
 
 	DESTINATION dest;
-	fread(&dest_id, sizeof(int), 1, fp);
 
 	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
 		printf("\nID: %d\n", dest.id);
@@ -130,7 +124,6 @@ void* read_dest_to_field(const char* const dest_file) {
 		perror("Greska pri otvaranju datoteke za ucitavanje u polje: ");
 		exit(EXIT_FAILURE);
 	}
-	fread(&dest_id, sizeof(int), 1, fp);
 
 	DESTINATION* dest_field = (DESTINATION*)calloc(dest_id, sizeof(DESTINATION));
 
@@ -141,13 +134,5 @@ void* read_dest_to_field(const char* const dest_file) {
 
 	fread(dest_field, sizeof(DESTINATION), dest_id, fp);
 
-	fclose(fp);
 	return dest_field;
-}
-
-//pitanja korisniku za odabir destinacije 
-void dest_choice(const DESTINATION* const dest_field) {
-	//provjeri zelim li stvarno toliko zastititi dest_field
-
-
 }

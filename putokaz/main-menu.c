@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include "header.h"
 
-int dest_id;
-
 enum menu_items {
 	ODABIR_DEST = 1,	//1. izbor
 	DODAVANJE_DEST,		//2. izbor
@@ -14,8 +12,6 @@ enum menu_items {
 };
 
 int main_menu(char* dest_file, char* traveler_file) {
-	//get_id(dest_file);
-
 	while (1) {
 		printf("\t=====================================\t\t");
 		printf("\n\t\t======\tPUTOKAZ\t======\t\t\n");
@@ -32,35 +28,16 @@ int main_menu(char* dest_file, char* traveler_file) {
 		printf("Unesite svoj odabir: ");
 		scanf("%d", &main_choice);
 
-		static DESTINATION* dest_field = NULL;
-
 		switch (main_choice) {
 		case ODABIR_DEST:
 			dest_print_question();
+			//sva pitanja za sortiranje kroz destinacije
+			//odgovore na pitanja spremam u traveler
+			static DESTINATION* dest_field = NULL;
 
 			dest_field = (DESTINATION*)read_dest_to_field(dest_file);
-			printf("ukupni id od destinacije je: %d\n", dest_id);
 
-			/*
-			//kontrolni printf
-			printf("ukupni id od destinacije je: %d\n", dest_id);
-			printf("Kontrolni printf:\n");
-			for (int i = 0; i < dest_id; i++) {
-				printf("\nID: % d\n", (dest_field+i)->id);
-				printf("Naziv destinacije: %s\n", (dest_field + i)->location.name);
-				printf("Drzava: %s\n", (dest_field + i)->location.country);
-				printf("Kontinent: %s\n", (dest_field + i)->location.continent);
-				printf("Udaljenost: %.2f\n", (dest_field + i)->location.distance);
-				printf("Cijena: %.2f\n", (dest_field + i)->cost);
-				printf("Prijevozna sredstva: %s\n", (dest_field + i)->travel_option);
-				printf("Sezona: %s\n", (dest_field + i)->season);
-				printf("Popularnost: %d\n", (dest_field + i)->popularity);
-				//printf("Upozorenja: %s\n", dest.warnings);
-				printf("Atrakcije: %s\n\n", (dest_field + i)->attractions);
-			}		*/
-
-
-
+			//delociraj memoriju!
 			break;
 
 		case DODAVANJE_DEST:
