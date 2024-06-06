@@ -29,7 +29,6 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		int main_choice = 0;
 
-
 		printf("\nKontrolni dest_id koji je u main-menu.c: %d\n", dest_id);
 
 		printf("Unesite svoj odabir: ");
@@ -40,12 +39,10 @@ int main_menu(char* dest_file, char* traveler_file) {
 		switch (main_choice) {
 		case ODABIR_DEST:
 			dest_print_question();
-			//sva pitanja za sortiranje kroz destinacije
-			//odgovore na pitanja spremam u traveler
-
 			dest_field = (DESTINATION*)read_dest_to_field(dest_file);
+			//mozda sortirati, ali pomocu polja pokazivaca umjesto da sortiram cijelo polje
+			//ne zelim sortirati cijelo polje jer bih imala previse parametara prema kojima bih trebala sortirati
 
-			//dealociraj memoriju!
 			break;
 
 		case DODAVANJE_DEST:
