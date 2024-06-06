@@ -14,9 +14,9 @@ enum menu_items {
 };
 
 int main_menu(char* dest_file, char* traveler_file) {
-	dest_id = get_id(dest_file);
-
 	while (1) {
+		dest_id = get_id(dest_file);
+
 		printf("\t=====================================\t\t");
 		printf("\n\t\t======\tPUTOKAZ\t======\t\t\n");
 		printf("\n\t\t1. Odabir destinacije\t\t\n");
@@ -30,7 +30,7 @@ int main_menu(char* dest_file, char* traveler_file) {
 		int main_choice = 0;
 
 
-		printf("\nKontolni dest_id koji je u main-menu.c: %d\n", dest_id);
+		printf("\nKontrolni dest_id koji je u main-menu.c: %d\n", dest_id);
 
 		printf("Unesite svoj odabir: ");
 		scanf("%d", &main_choice);
@@ -64,7 +64,35 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		case BRISANJE_DEST:
 			dest_print_question();
-			printf("\nJa sam 6. izbor.\n");
+			int delete_id = 0;
+			printf("\nUnesite ID destinacije koju zelite izbrisati: ");
+			scanf("%d", &delete_id);
+
+			if (delete_id > dest_id+1) {
+				printf("Unesite postojeci ID.\n");
+				dest_print_question();
+			}
+			else {
+				dest_delete(delete_id, dest_file);
+			}
+
+			/*
+			printf("Kontrolni printf destinacije koju treba obrisati:\n");
+				printf("\nID: % d\n", (dest_field + delete_id)->id);
+				printf("Naziv destinacije: %s\n", (dest_field + delete_id)->location.name);
+				printf("Drzava: %s\n", (dest_field + delete_id)->location.country);
+				printf("Kontinent: %s\n", (dest_field + delete_id)->location.continent);
+				printf("Udaljenost: %.2f\n", (dest_field + delete_id)->location.distance);
+				printf("Cijena: %.2f\n", (dest_field + delete_id)->cost);
+				printf("Prijevozna sredstva: %s\n", (dest_field + delete_id)->travel_option);
+				printf("Sezona: %s\n", (dest_field + delete_id)->season);
+				printf("Popularnost: %d\n", (dest_field + delete_id)->popularity);
+				//printf("Upozorenja: %s\n", dest.warnings);
+				printf("Atrakcije: %s\n\n", (dest_field + delete_id)->attractions);
+			*/
+
+			//printf("\nDestinacija za brisanje: %d, %s, %s, %s", (dest_field + delete_id)->id, (dest_field + delete_id)->location.name);
+			
 
 			//izbor: zeli li korisnik brisanje samo jedne destinacije ili vise; brisanje je po kljucnoj rijeci,
 			//gdje cu od korisnika najprije traziti po kojem parametru zeli pretrazivanje (cijena, drzava itd)

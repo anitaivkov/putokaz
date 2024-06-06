@@ -29,7 +29,7 @@ int get_id(const char* dest_file) {
 	//int max_id = 0;
 	int counter = 0;
 
-	while (fread(&dest, sizeof(DESTINATION), 1, fp)) {
+	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
 		//if (dest.id > max_id) {
 		//	max_id = dest.id;
 		//}
@@ -37,11 +37,10 @@ int get_id(const char* dest_file) {
 	}
 	fclose(fp);
 
-	if (counter == 0) {
-		return 0;
-	}
 	dest_id = counter;
-	return counter;
+	printf("Kontrolni id koji je u funkciji get_id: %d", dest_id);
+
+	return dest_id;
 }
 
 
@@ -49,7 +48,7 @@ int get_id(const char* dest_file) {
 void add_destination(const char* dest_file) {
 	DESTINATION dest;
 
-	dest.id = get_id(dest_file);
+	dest.id = get_id(dest_file) + 1;
 
 	printf("Unesite naziv destinacije: ");
 	scanf(" %49[^\n]%*c", dest.location.name);				//prima razmake u unosu
@@ -79,8 +78,9 @@ void add_destination(const char* dest_file) {
 	}
 
 	fwrite(&dest, sizeof(DESTINATION), 1, fp);
-	get_id(dest_file);
+	printf("Ja sam id iz funkcije add_destination:  %d\n", dest_id);
 	fclose(fp);
+	get_id(dest_file);
 	return;
 }
 
@@ -124,6 +124,7 @@ void dest_print_question() {
 	} while (choice != 'Y' && choice != 'y' && choice != 'N' && choice != 'n');
 }
 
+//citanje podataka iz datoteke u dinamicki zauzeto polje
 void* read_dest_to_field(const char* const dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 	if (fp == NULL) {
@@ -132,13 +133,77 @@ void* read_dest_to_field(const char* const dest_file) {
 	}
 
 	DESTINATION* dest_field = (DESTINATION*)calloc(dest_id, sizeof(DESTINATION));
-
 	if (dest_field == NULL) {
 		perror("Greska u dinamicki alociranoj memoriji za destinacije: ");
 		exit(EXIT_FAILURE);
 	}
 
 	fread(dest_field, sizeof(DESTINATION), dest_id, fp);
-
+	fclose(fp);
 	return dest_field;
 }
+
+
+//brisanje destinacije na temelju id-a
+void dest_delete(int delete_id, char* dest_file) {
+	FILE* fp = fopen(dest_file, "rb");
+
+	if (fp == NULL) {
+		perror("Greska pri otvaranju datototeke za brisanje destinacije: ");
+		exit(EXIT_FAILURE);
+	}
+
+	FILE* temp_fp = fopen("temp.bin", "wb");
+	if (temp_fp == NULL) {
+		perror("Greska pri otvaranju privremene datoteke: ");
+		fclose(fp);
+		return;
+	}
+
+	DESTINATION dest;
+	int found = 0;
+
+	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
+		if (dest.id != delete_id) {
+			fwrite(&dest, sizeof(DESTINATION), 1, temp_fp);
+		}
+		else {
+			found = 1;
+		}
+	}
+
+	fclose(fp);
+	fclose(temp_fp);
+
+	if (found) {
+		remove(dest_file);
+		rename("temp.bin", dest_file);
+		printf("Destinacija s ID %d je uspjesno obrisana.\n", delete_id);
+		get_id(dest_file);  // Ažuriraj dest_id nakon brisanja
+	}
+	else {
+		printf("Destinacija s ID %d nije pronadjena.\n", delete_id);
+		remove("temp.bin");
+	}
+}
+
+	/*
+	fseek(fp, sizeof(int), SEEK_SET);
+	int i;
+	int dest_counter = 0;
+
+	for (i = 0; i < dest_id; i++) {
+		if (*dest_for_delete != dest_field[i]) {
+			fwrite(dest_field[i], sizeof(int), 1, fp);
+			dest_counter++;
+		}
+	}
+
+	rewind(fp);
+	fwrite(&dest_counter, sizeof(int), 1, fp);
+	fclose(fp);
+
+	printf("\nDestinacija je uspjesno obrisana.\n");
+	*dest_for_delete = NULL;
+	 
+}*/
