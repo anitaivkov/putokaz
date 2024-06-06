@@ -175,6 +175,7 @@ void dest_delete(int delete_id, char* dest_file) {
 	fclose(fp);
 	fclose(temp_fp);
 
+
 	if (found) {
 		remove(dest_file);
 		rename("temp.bin", dest_file);
@@ -186,24 +187,3 @@ void dest_delete(int delete_id, char* dest_file) {
 		remove("temp.bin");
 	}
 }
-
-	/*
-	fseek(fp, sizeof(int), SEEK_SET);
-	int i;
-	int dest_counter = 0;
-
-	for (i = 0; i < dest_id; i++) {
-		if (*dest_for_delete != dest_field[i]) {
-			fwrite(dest_field[i], sizeof(int), 1, fp);
-			dest_counter++;
-		}
-	}
-
-	rewind(fp);
-	fwrite(&dest_counter, sizeof(int), 1, fp);
-	fclose(fp);
-
-	printf("\nDestinacija je uspjesno obrisana.\n");
-	*dest_for_delete = NULL;
-	 
-}*/

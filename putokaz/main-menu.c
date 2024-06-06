@@ -76,24 +76,6 @@ int main_menu(char* dest_file, char* traveler_file) {
 				dest_delete(delete_id, dest_file);
 			}
 
-			/*
-			printf("Kontrolni printf destinacije koju treba obrisati:\n");
-				printf("\nID: % d\n", (dest_field + delete_id)->id);
-				printf("Naziv destinacije: %s\n", (dest_field + delete_id)->location.name);
-				printf("Drzava: %s\n", (dest_field + delete_id)->location.country);
-				printf("Kontinent: %s\n", (dest_field + delete_id)->location.continent);
-				printf("Udaljenost: %.2f\n", (dest_field + delete_id)->location.distance);
-				printf("Cijena: %.2f\n", (dest_field + delete_id)->cost);
-				printf("Prijevozna sredstva: %s\n", (dest_field + delete_id)->travel_option);
-				printf("Sezona: %s\n", (dest_field + delete_id)->season);
-				printf("Popularnost: %d\n", (dest_field + delete_id)->popularity);
-				//printf("Upozorenja: %s\n", dest.warnings);
-				printf("Atrakcije: %s\n\n", (dest_field + delete_id)->attractions);
-			*/
-
-			//printf("\nDestinacija za brisanje: %d, %s, %s, %s", (dest_field + delete_id)->id, (dest_field + delete_id)->location.name);
-			
-
 			//izbor: zeli li korisnik brisanje samo jedne destinacije ili vise; brisanje je po kljucnoj rijeci,
 			//gdje cu od korisnika najprije traziti po kojem parametru zeli pretrazivanje (cijena, drzava itd)
 			break;
