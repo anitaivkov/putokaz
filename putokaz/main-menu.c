@@ -29,7 +29,7 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		int main_choice = 0;
 
-		printf("\nKontrolni dest_id koji je u main-menu.c: %d\n", dest_id);
+		printf("\n***********Kontrolni dest_id koji je u main-menu.c: %d\n", dest_id);
 
 		printf("Unesite svoj odabir: ");
 		scanf("%d", &main_choice);
@@ -40,8 +40,7 @@ int main_menu(char* dest_file, char* traveler_file) {
 		case ODABIR_DEST:
 			dest_print_question();
 			dest_field = (DESTINATION*)read_dest_to_field(dest_file);
-			//mozda sortirati, ali pomocu polja pokazivaca umjesto da sortiram cijelo polje
-			//ne zelim sortirati cijelo polje jer bih imala previse parametara prema kojima bih trebala sortirati
+						
 
 			break;
 
@@ -75,6 +74,7 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 			//izbor: zeli li korisnik brisanje samo jedne destinacije ili vise; brisanje je po kljucnoj rijeci,
 			//gdje cu od korisnika najprije traziti po kojem parametru zeli pretrazivanje (cijena, drzava itd)
+			//ispravi brisanje t.d. se ispravno izvodi i nakon nekoliko pogresnih izbora (neka do-while petljica itd)
 			break;
 
 		case IZLAZ_IZ_PROGRAMA:

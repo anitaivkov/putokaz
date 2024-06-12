@@ -26,19 +26,16 @@ int get_id(const char* dest_file) {
 	}
 
 	DESTINATION dest;
-	//int max_id = 0;
 	int counter = 0;
 
 	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
-		//if (dest.id > max_id) {
-		//	max_id = dest.id;
-		//}
 		counter++;
 	}
+
 	fclose(fp);
 
 	dest_id = counter;
-	printf("Kontrolni id koji je u funkciji get_id: %d", dest_id);
+	printf("\n***********Kontrolni id koji je u funkciji get_id: %d", dest_id);
 
 	return dest_id;
 }
@@ -78,9 +75,9 @@ void add_destination(const char* dest_file) {
 	}
 
 	fwrite(&dest, sizeof(DESTINATION), 1, fp);
-	printf("Ja sam id iz funkcije add_destination:  %d\n", dest_id);
 	fclose(fp);
 	get_id(dest_file);
+	printf("\n****************Ja sam id iz funkcije add_destination:  %d\n", dest_id);
 	return;
 }
 
@@ -104,7 +101,7 @@ void read_destinations(const char* dest_file) {
 		printf("Prijevozna sredstva: %s\n", dest.travel_option);
 		printf("Sezona: %s\n", dest.season);
 		printf("Popularnost: %d\n", dest.popularity);
-		//printf("Upozorenja: %s\n", dest.warnings);
+		printf("Upozorenja: %s\n", dest.warnings);
 		printf("Atrakcije: %s\n\n", dest.attractions);
 	}
 	fclose(fp);
@@ -144,7 +141,7 @@ void* read_dest_to_field(const char* const dest_file) {
 }
 
 
-//brisanje destinacije na temelju id-a
+//brisanje destinacije na temelju id-a				-->ubaci objasnjenje funkcije
 void dest_delete(int delete_id, char* dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 
@@ -180,10 +177,11 @@ void dest_delete(int delete_id, char* dest_file) {
 		remove(dest_file);
 		rename("temp.bin", dest_file);
 		printf("Destinacija s ID %d je uspjesno obrisana.\n", delete_id);
-		get_id(dest_file);  // Ažuriraj dest_id nakon brisanja
+		get_id(dest_file);			//azuriraj dest_id nakon brisanja
 	}
 	else {
 		printf("Destinacija s ID %d nije pronadjena.\n", delete_id);
 		remove("temp.bin");
 	}
 }
+
