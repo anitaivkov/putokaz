@@ -27,7 +27,11 @@ int get_id(const char* dest_file);
 void add_destination(const char* dest_file);
 void read_destinations(const char* dest_file);
 void dest_print_question();
-void* read_dest_to_field(const char* const dest_file);
+//void* read_dest_to_field(const char* const dest_file);
+DESTINATION* read_dest_to_field(const char* const file_name, int* dest_count);
 void dest_delete(int delete_id, char* dest_file);
+int match_criteria(DESTINATION dest, float budget, char travel_option, char season);
+void find_best_destinations(DESTINATION* dest_array, int dest_count, float budget, char travel_option, char season);
+void gather_user_preferences(float* budget, char* travel_option, char* season);
 
 #endif // HEADER_H

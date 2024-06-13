@@ -121,7 +121,7 @@ void dest_print_question() {
 	} while (choice != 'Y' && choice != 'y' && choice != 'N' && choice != 'n');
 }
 
-//citanje podataka iz datoteke u dinamicki zauzeto polje
+/*//citanje podataka iz datoteke u dinamicki zauzeto polje
 void* read_dest_to_field(const char* const dest_file) {
 	FILE* fp = fopen(dest_file, "rb");
 	if (fp == NULL) {
@@ -138,6 +138,31 @@ void* read_dest_to_field(const char* const dest_file) {
 	fread(dest_field, sizeof(DESTINATION), dest_id, fp);
 	fclose(fp);
 	return dest_field;
+}	*/
+
+DESTINATION* read_dest_to_field(const char* const file_name, int* dest_count) {
+	FILE* fp = fopen(file_name, "rb");
+	if (!fp) {
+		perror("Greska pri otvaranju datoteke destinacija");
+		return NULL;
+	}
+
+	fseek(fp, 0, SEEK_END);
+	long file_size = ftell(fp);
+	rewind(fp);
+
+	*dest_count = file_size / sizeof(DESTINATION);
+	DESTINATION* dest_array = (DESTINATION*)malloc(*dest_count * sizeof(DESTINATION));
+	if (!dest_array) {
+		perror("Greska pri alokaciji memorije za destinacije");
+		fclose(fp);
+		return NULL;
+	}
+
+	fread(dest_array, sizeof(DESTINATION), *dest_count, fp);
+	fclose(fp);
+
+	return dest_array;
 }
 
 
@@ -183,5 +208,60 @@ void dest_delete(int delete_id, char* dest_file) {
 		printf("Destinacija s ID %d nije pronadjena.\n", delete_id);
 		remove("temp.bin");
 	}
+}
+
+
+int match_criteria(DESTINATION dest, float budget, char travel_option, char season) {
+	int match_count = 0;
+
+	if (dest.cost <= budget) match_count++;
+	if (dest.travel_option == travel_option) match_count++;
+	if (dest.season == season) match_count++;
+
+	// Additional criteria can be added here
+	// if (other_criteria) match_count++;
+
+	return match_count;
+}
+
+void find_best_destinations(DESTINATION* dest_array, int dest_count, float budget, char travel_option, char season) {
+	int* match_counts = (int*)malloc(dest_count * sizeof(int));
+	for (int i = 0; i < dest_count; i++) {
+		match_counts[i] = match_criteria(dest_array[i], budget, travel_option, season);
+	}
+
+	for (int i = 0; i < 4 && i < dest_count; i++) {
+		int max_index = -1;
+		int max_value = -1;
+		for (int j = 0; j < dest_count; j++) {
+			if (match_counts[j] > max_value) {
+				max_value = match_counts[j];
+				max_index = j;
+			}
+		}
+
+		if (max_index != -1) {
+			printf("Destinacija: %s, Zemlja: %s, Kontinent: %s, Cijena: %.2f, Podudaranje kriterija: %d\n",
+				dest_array[max_index].location.name,
+				dest_array[max_index].location.country,
+				dest_array[max_index].location.continent,
+				dest_array[max_index].cost,
+				max_value);
+			match_counts[max_index] = -1; // Exclude this destination from further consideration
+		}
+	}
+
+	free(match_counts);
+}
+
+void gather_user_preferences(float* budget, char* travel_option, char* season) {
+	printf("Unesite vas budzet: ");
+	scanf("%f", budget);
+
+	printf("Unesite opciju putovanja (A za avion, T za vlak, B za autobus): ");
+	scanf(" %c", travel_option);
+
+	printf("Unesite preferirano godisnje doba (S za ljeto, W za zimu, A za jesen, F za proljece): ");
+	scanf(" %c", season);
 }
 

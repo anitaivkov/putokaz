@@ -38,9 +38,21 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		switch (main_choice) {
 		case ODABIR_DEST:
+			//dest_print_question();
+			//dest_field = (DESTINATION*)read_dest_to_field(dest_file);
+				
 			dest_print_question();
-			dest_field = (DESTINATION*)read_dest_to_field(dest_file);
-						
+			int dest_count = 0;
+			dest_field = read_dest_to_field(dest_file, &dest_count);
+			if (dest_field) {
+				float budget;
+				char travel_option;
+				char season;
+
+				gather_user_preferences(&budget, &travel_option, &season);
+				find_best_destinations(dest_field, dest_count, budget, travel_option, season);
+				free(dest_field);
+			}
 
 			break;
 
@@ -79,8 +91,7 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		case IZLAZ_IZ_PROGRAMA:
 			free(dest_field);
-
-			return 0;
+			return;
 			break;
 
 		default:
