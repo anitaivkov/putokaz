@@ -35,7 +35,6 @@ int get_id(const char* dest_file) {
 	fclose(fp);
 
 	dest_id = counter;
-	printf("\n***********Kontrolni id koji je u funkciji get_id: %d", dest_id);
 
 	return dest_id;
 }
@@ -121,40 +120,24 @@ void dest_print_question() {
 	} while (choice != 'Y' && choice != 'y' && choice != 'N' && choice != 'n');
 }
 
-/*//citanje podataka iz datoteke u dinamicki zauzeto polje
-void* read_dest_to_field(const char* const dest_file) {
-	FILE* fp = fopen(dest_file, "rb");
+
+DESTINATION* read_dest_to_field(const char* const file_name, int* dest_count) {
+	FILE* fp = fopen(file_name, "rb");
 	if (fp == NULL) {
 		perror("Greska pri otvaranju datoteke za ucitavanje u polje: ");
 		exit(EXIT_FAILURE);
 	}
 
-	DESTINATION* dest_field = (DESTINATION*)calloc(dest_id, sizeof(DESTINATION));
-	if (dest_field == NULL) {
-		perror("Greska u dinamicki alociranoj memoriji za destinacije: ");
-		exit(EXIT_FAILURE);
-	}
-
-	fread(dest_field, sizeof(DESTINATION), dest_id, fp);
-	fclose(fp);
-	return dest_field;
-}	*/
-
-DESTINATION* read_dest_to_field(const char* const file_name, int* dest_count) {
-	FILE* fp = fopen(file_name, "rb");
-	if (!fp) {
-		perror("Greska pri otvaranju datoteke destinacija");
-		return NULL;
-	}
-
 	fseek(fp, 0, SEEK_END);
 	long file_size = ftell(fp);
+	printf("Vrijednost ftell: %ld", file_size);
 	rewind(fp);
 
 	*dest_count = file_size / sizeof(DESTINATION);
-	DESTINATION* dest_array = (DESTINATION*)malloc(*dest_count * sizeof(DESTINATION));
+
+	DESTINATION* dest_array = (DESTINATION*)calloc(*dest_count, sizeof(DESTINATION));
 	if (!dest_array) {
-		perror("Greska pri alokaciji memorije za destinacije");
+		perror("\nGreska pri alokaciji memorije za destinacije");
 		fclose(fp);
 		return NULL;
 	}
@@ -215,17 +198,28 @@ int match_criteria(DESTINATION dest, float budget, char travel_option, char seas
 	int match_count = 0;
 
 	if (dest.cost <= budget) match_count++;
-	if (dest.travel_option == travel_option) match_count++;
-	if (dest.season == season) match_count++;
-
-	// Additional criteria can be added here
-	// if (other_criteria) match_count++;
+	if (strcmp(dest.travel_option, travel_option) == 0) {
+		match_count++;
+	}
+	if (strcmp(dest.season, season) == 0) {
+		match_count++;
+	}
 
 	return match_count;
 }
 
 void find_best_destinations(DESTINATION* dest_array, int dest_count, float budget, char travel_option, char season) {
-	int* match_counts = (int*)malloc(dest_count * sizeof(int));
+	if (dest_count <= 0) {
+		printf("Nema dostupnih destinacija.\n");
+		return;
+	}
+
+	int* match_counts = (int*)calloc(dest_count, sizeof(int));
+	if (!match_counts) {
+		perror("Greska pri alokaciji memorije za match_counts");
+		return;
+	}
+
 	for (int i = 0; i < dest_count; i++) {
 		match_counts[i] = match_criteria(dest_array[i], budget, travel_option, season);
 	}
@@ -258,10 +252,10 @@ void gather_user_preferences(float* budget, char* travel_option, char* season) {
 	printf("Unesite vas budzet: ");
 	scanf("%f", budget);
 
-	printf("Unesite opciju putovanja (A za avion, T za vlak, B za autobus): ");
+	printf("Unesite opciju putovanja (AU za automobil, AV za avion, V za vlak, AB za autobus): ");
 	scanf(" %c", travel_option);
 
-	printf("Unesite preferirano godisnje doba (S za ljeto, W za zimu, A za jesen, F za proljece): ");
+	printf("Unesite preferirano godisnje doba (L za ljeto, Z za zimu, J za jesen, P za proljece): ");
 	scanf(" %c", season);
 }
 

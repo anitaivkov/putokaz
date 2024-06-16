@@ -51,7 +51,6 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 				gather_user_preferences(&budget, &travel_option, &season);
 				find_best_destinations(dest_field, dest_count, budget, travel_option, season);
-				free(dest_field);
 			}
 
 			break;
@@ -91,7 +90,9 @@ int main_menu(char* dest_file, char* traveler_file) {
 
 		case IZLAZ_IZ_PROGRAMA:
 			free(dest_field);
-			return;
+			dest_field = NULL;
+			return 0;
+
 			break;
 
 		default:

@@ -2,14 +2,6 @@
 #include <stdio.h>
 #include "header.h"
 
-//koncepti: STATIC!!(5.), extern(7.), makro i inline fcije(8.), const(12.), 
-//staticka polja(13.),fseek itd (18.), (19.), upravljanje errorima (20.),  (23.), def jednostruko povezana lista
-
-//biljeske: koristi const!, staticko polje, malloc != calloc, mozda implementirati 
-//pravu rekurziju, mozda premjesti strukture u svoj header
-
-//NE RADI ID--> POPRAVI GA
-
 int dest_id = 0;
 
 int main() {
