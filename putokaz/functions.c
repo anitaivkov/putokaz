@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "header.h"
+#include "data-types.h"
+#include "functions.h"
 
 extern int dest_id;
 
@@ -28,7 +29,7 @@ int get_id(const char* dest_file) {
 	DESTINATION dest;
 	int counter = 0;
 
-	while (fread(&dest, sizeof(DESTINATION), 1, fp) == 1) {
+	while (fread(&dest, sizeof(DESTINATION), 1, fp)) {
 		counter++;
 	}
 
@@ -38,7 +39,6 @@ int get_id(const char* dest_file) {
 
 	return dest_id;
 }
-
 
 //unos destinacije i upis u datoteku destinations.bin
 void add_destination(const char* dest_file) {
@@ -50,16 +50,22 @@ void add_destination(const char* dest_file) {
 	scanf(" %49[^\n]%*c", dest.location.name);				//prima razmake u unosu
 	printf("Unesite drzavu: ");
 	scanf(" %49[^\n]%*c", dest.location.country);			//prima razmake u unosu
+
+	//izmjena u izbor
 	printf("Unesite kontinent: ");
 	scanf(" %49[^\n]%*c", dest.location.continent);			//prima razmake u unosu
 	printf("Unesite udaljenost (u kilometrima): ");
 	scanf("%f", &dest.location.distance);
 	printf("Unesite cijenu (u eurima): ");
 	scanf("%f", &dest.cost);
+
+	//izmjena u izbor
 	printf("Unesite prijevozna sredstva: ");
 	scanf(" %49[^\n]%*c", dest.travel_option);			//prima razmake u unosu
-	printf("Unesite sezonu: ");
+	//izmjena u izbor
+	printf("Odaberite najbolje godisnje doba za posjet:\n1.) Proljece\n2.) Ljeto\n3.) Jesen\n4.) Zima");
 	scanf("%49s", dest.season);
+
 	printf("Unesite popularnost (u postotcima): ");
 	scanf("%d", &dest.popularity);
 	printf("Unesite upozorenja: ");
@@ -76,7 +82,6 @@ void add_destination(const char* dest_file) {
 	fwrite(&dest, sizeof(DESTINATION), 1, fp);
 	fclose(fp);
 	get_id(dest_file);
-	printf("\n****************Ja sam id iz funkcije add_destination:  %d\n", dest_id);
 	return;
 }
 
@@ -130,7 +135,6 @@ DESTINATION* read_dest_to_field(const char* const file_name, int* dest_count) {
 
 	fseek(fp, 0, SEEK_END);
 	long file_size = ftell(fp);
-	printf("Vrijednost ftell: %ld", file_size);
 	rewind(fp);
 
 	*dest_count = file_size / sizeof(DESTINATION);

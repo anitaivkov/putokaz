@@ -1,17 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include "header.h"
+#include "data-types.h"
+#include "functions.h"
 
 extern int dest_id;
-
-enum menu_items {
-	ODABIR_DEST = 1,	//1. izbor
-	DODAVANJE_DEST,		//2. izbor
-	AZURIRANJE_DEST,	//3. izbor
-	ISPIS_DEST,			//4. izbor
-	BRISANJE_DEST,		//5. izbor
-	IZLAZ_IZ_PROGRAMA	//6. izbor
-};
 
 int main_menu(char* dest_file, char* traveler_file) {
 	while (1) {
@@ -28,8 +20,6 @@ int main_menu(char* dest_file, char* traveler_file) {
 		printf("\t=====================================\t\t\n");
 
 		int main_choice = 0;
-
-		printf("\n***********Kontrolni dest_id koji je u main-menu.c: %d\n", dest_id);
 
 		printf("Unesite svoj odabir: ");
 		scanf("%d", &main_choice);
@@ -52,7 +42,6 @@ int main_menu(char* dest_file, char* traveler_file) {
 				gather_user_preferences(&budget, &travel_option, &season);
 				find_best_destinations(dest_field, dest_count, budget, travel_option, season);
 			}
-
 			break;
 
 		case DODAVANJE_DEST:

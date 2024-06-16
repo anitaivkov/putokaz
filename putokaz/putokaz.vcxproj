@@ -130,10 +130,10 @@
     <ClCompile Include="functions.c" />
     <ClCompile Include="main-menu.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="search-menu.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header.h" />
+    <ClInclude Include="data-types.h" />
+    <ClInclude Include="functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

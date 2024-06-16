@@ -1,6 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include "header.h"
+#include "data-types.h"
+#include "functions.h"
 
 int dest_id = 0;
 
