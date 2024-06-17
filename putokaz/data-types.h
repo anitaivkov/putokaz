@@ -19,10 +19,37 @@ typedef struct destination {
 }DESTINATION;
 
 enum menu_items {
-	ODABIR_DEST = 1,	//1. izbor
-	DODAVANJE_DEST,		//2. izbor
-	AZURIRANJE_DEST,	//3. izbor
-	ISPIS_DEST,			//4. izbor
-	BRISANJE_DEST,		//5. izbor
-	IZLAZ_IZ_PROGRAMA	//6. izbor
+	CHOOSE_DEST = 1,	//1. izbor
+	ADD_DEST,			//2. izbor
+	UPDATE_DEST,		//3. izbor
+	PRINT_DEST,			//4. izbor
+	DELETE_DEST,		//5. izbor
+	EXIT				//6. izbor
+};
+
+enum continent {
+	EUROPE = 1,
+	ASIA,
+	AFRICA,
+	NORTH_AMERICA,
+	SOUTH_AMERICA,
+	AUSTRALIA,
+	ANTARCTICA,
+	UNKNOWN_CONTINENT
+};
+
+enum travel_option {
+	CAR = 1,
+	PLANE,
+	TRAIN,
+	BUS,
+	UNKNOWN_TRAVEL_OPTION
+};
+
+enum season {
+	SPRING = 1,
+	SUMMER,
+	AUTUMN,
+	WINTER,
+	UNKNOWN_SEASON
 };

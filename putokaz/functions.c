@@ -34,7 +34,6 @@ int get_id(const char* dest_file) {
 	}
 
 	fclose(fp);
-
 	dest_id = counter;
 
 	return dest_id;
@@ -52,8 +51,9 @@ void add_destination(const char* dest_file) {
 	scanf(" %49[^\n]%*c", dest.location.country);			//prima razmake u unosu
 
 	//izmjena u izbor
-	printf("Unesite kontinent: ");
-	scanf(" %49[^\n]%*c", dest.location.continent);			//prima razmake u unosu
+	//printf("Unesite kontinent: ");
+	//scanf(" %49[^\n]%*c", dest.location.continent);			//prima razmake u unosu
+
 	printf("Unesite udaljenost (u kilometrima): ");
 	scanf("%f", &dest.location.distance);
 	printf("Unesite cijenu (u eurima): ");

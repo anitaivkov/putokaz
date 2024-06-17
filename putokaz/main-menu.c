@@ -27,11 +27,8 @@ int main_menu(char* dest_file, char* traveler_file) {
 		static DESTINATION* dest_field = NULL;
 
 		switch (main_choice) {
-		case ODABIR_DEST:
-			//dest_print_question();
-			//dest_field = (DESTINATION*)read_dest_to_field(dest_file);
-				
-			dest_print_question();
+		case CHOOSE_DEST:
+			dest_print_question();																							
 			int dest_count = 0;
 			dest_field = read_dest_to_field(dest_file, &dest_count);
 			if (dest_field) {
@@ -44,21 +41,21 @@ int main_menu(char* dest_file, char* traveler_file) {
 			}
 			break;
 
-		case DODAVANJE_DEST:
+		case ADD_DEST:
 			add_destination(dest_file);
 			break;
 
-		case AZURIRANJE_DEST:
+		case UPDATE_DEST:
 			dest_print_question();
 			printf("\nJa sam 3. izbor.\n");
 			//izmjena nekog podatka u strukturi DESTINATION
 			break; 
 
-		case ISPIS_DEST:
+		case PRINT_DEST:
 			read_destinations(dest_file);
 			break;
 
-		case BRISANJE_DEST:
+		case DELETE_DEST:
 			dest_print_question();
 			int delete_id = 0;
 			printf("\nUnesite ID destinacije koju zelite izbrisati: ");
@@ -77,7 +74,7 @@ int main_menu(char* dest_file, char* traveler_file) {
 			//ispravi brisanje t.d. se ispravno izvodi i nakon nekoliko pogresnih izbora (neka do-while petljica itd)
 			break;
 
-		case IZLAZ_IZ_PROGRAMA:
+		case EXIT:
 			free(dest_field);
 			dest_field = NULL;
 			return 0;
