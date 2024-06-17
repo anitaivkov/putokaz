@@ -18,7 +18,7 @@ typedef struct destination {
 	char attractions[256];
 }DESTINATION;
 
-enum menu_items {
+enum menu_items_enum {
 	CHOOSE_DEST = 1,	//1. izbor
 	ADD_DEST,			//2. izbor
 	UPDATE_DEST,		//3. izbor
@@ -27,7 +27,7 @@ enum menu_items {
 	EXIT				//6. izbor
 };
 
-enum continent {
+enum continent_enum {
 	EUROPE = 1,
 	ASIA,
 	AFRICA,
@@ -38,7 +38,7 @@ enum continent {
 	UNKNOWN_CONTINENT
 };
 
-enum travel_option {
+enum travel_option_enum {
 	CAR = 1,
 	PLANE,
 	TRAIN,
@@ -46,7 +46,7 @@ enum travel_option {
 	UNKNOWN_TRAVEL_OPTION
 };
 
-enum season {
+enum season_enum {
 	SPRING = 1,
 	SUMMER,
 	AUTUMN,

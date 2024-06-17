@@ -33,11 +33,11 @@ int main_menu(char* dest_file, char* traveler_file) {
 			dest_field = read_dest_to_field(dest_file, &dest_count);
 			if (dest_field) {
 				float budget;
-				char travel_option;
-				char season;
+				char travel_options[256];
+				int season;
 
-				gather_user_preferences(&budget, &travel_option, &season);
-				find_best_destinations(dest_field, dest_count, budget, travel_option, season);
+				gather_user_preferences(&budget, travel_options, &season);
+				find_best_destinations(dest_field, dest_count, budget, travel_options, season);
 			}
 			break;
 

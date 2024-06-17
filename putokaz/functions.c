@@ -42,6 +42,21 @@ int get_id(const char* dest_file) {
 //unos destinacije i upis u datoteku destinations.bin
 void add_destination(const char* dest_file) {
 	DESTINATION dest;
+	int continent_choice;
+	int season_choice;
+	int travel_option_choice;
+	char travel_options[50] = "\0";
+
+	const char* continent_names[] = {
+	"Europa",
+	"Azija",
+	"Afrika",
+	"Sjeverna Amerika",
+	"Juzna Amerika",
+	"Australija",
+	"Antarktika",
+	"Nepoznato"
+	};
 
 	dest.id = get_id(dest_file) + 1;
 
@@ -54,11 +69,31 @@ void add_destination(const char* dest_file) {
 	//printf("Unesite kontinent: ");
 	//scanf(" %49[^\n]%*c", dest.location.continent);			//prima razmake u unosu
 
+	// Unos za kontinent
+	printf("Odaberite kontinent:\n");
+	printf("1. Europa\n");
+	printf("2. Azija\n");
+	printf("3. Afrika\n");
+	printf("4. Sjeverna Amerika\n");
+	printf("5. Juzna Amerika\n");
+	printf("6. Australija\n");
+	printf("7. Antarktika\n");
+	printf("Unesite svoj odabir: ");
+	scanf("%d", &continent_choice);
+
+	if (continent_choice >= 1 && continent_choice <= 7) {
+		strcpy(dest.location.continent, continent_names[continent_choice - 1]);
+	}
+	else {
+		strcpy(dest.location.continent, continent_names[7]); // "Nepoznato"
+	}
+
 	printf("Unesite udaljenost (u kilometrima): ");
 	scanf("%f", &dest.location.distance);
 	printf("Unesite cijenu (u eurima): ");
 	scanf("%f", &dest.cost);
 
+	/*
 	//izmjena u izbor
 	printf("Unesite prijevozna sredstva: ");
 	scanf(" %49[^\n]%*c", dest.travel_option);			//prima razmake u unosu
@@ -72,6 +107,66 @@ void add_destination(const char* dest_file) {
 	scanf(" %255[^\n]%*c", dest.warnings);			//prima razmake u unosu
 	printf("Unesite atrakcije: ");
 	scanf(" %255[^\n]%*c", dest.attractions);		//prima razmake u unosu
+	*/
+
+	// Unos za prijevozna sredstva
+	printf("Odaberite prijevozna sredstva (unesite 0 za kraj):\n");
+	printf("1. Automobil\n");
+	printf("2. Avion\n");
+	printf("3. Vlak\n");
+	printf("4. Autobus\n");
+	do {
+		printf("Unesite svoj odabir: ");
+		scanf("%d", &travel_option_choice);
+		if (travel_option_choice >= 1 && travel_option_choice <= 4) {
+			if (strlen(travel_options) > 0) {
+				strcat(travel_options, ", ");
+			}
+			switch (travel_option_choice) {
+			case CAR:
+				strcat(travel_options, "Automobil");
+				break;
+			case PLANE:
+				strcat(travel_options, "Avion");
+				break;
+			case TRAIN:
+				strcat(travel_options, "Vlak");
+				break;
+			case BUS:
+				strcat(travel_options, "Autobus");
+				break;
+			}
+		}
+	} while (travel_option_choice != 0);
+
+	strcpy(dest.travel_option, travel_options);
+
+	// Unos za sezonu
+	printf("Odaberite sezonu:\n");
+	printf("1. Ljeto\n");
+	printf("2. Zima\n");
+	printf("3. Jesen\n");
+	printf("4. Proljece\n");
+	printf("Unesite svoj odabir: ");
+	scanf("%d", &season_choice);
+
+	if (season_choice >= 1 && season_choice <= 4) {
+		dest.season[0] = '\0';
+		switch (season_choice) {
+		case SPRING:
+			strcpy(dest.season, "Proljece");
+			break;
+		case SUMMER:
+			strcpy(dest.season, "Ljeto");
+			break;
+		case AUTUMN:
+			strcpy(dest.season, "Jesen");
+			break;
+		case WINTER:
+			strcpy(dest.season, "Zima");
+			break;
+		}
+	}
 
 	FILE* fp = fopen(dest_file, "ab");
 	if (fp == NULL) {
@@ -197,69 +292,91 @@ void dest_delete(int delete_id, char* dest_file) {
 	}
 }
 
-
-int match_criteria(DESTINATION dest, float budget, char travel_option, char season) {
-	int match_count = 0;
-
-	if (dest.cost <= budget) match_count++;
-	if (strcmp(dest.travel_option, travel_option) == 0) {
-		match_count++;
-	}
-	if (strcmp(dest.season, season) == 0) {
-		match_count++;
+int match_criteria(DESTINATION dest, float budget, const char* travel_options, int season) {
+	if (dest.cost > budget) {
+		return 0;
 	}
 
-	return match_count;
+	// Provjera putnih opcija
+	if (strlen(travel_options) > 0 && !strstr(travel_options, dest.travel_option)) {
+		return 0;
+	}
+
+	// Provjera sezone
+	if (strcmp(dest.season, "Ljeto") == 0 && season != SUMMER) return 0;
+	if (strcmp(dest.season, "Zima") == 0 && season != WINTER) return 0;
+	if (strcmp(dest.season, "Jesen") == 0 && season != AUTUMN) return 0;
+	if (strcmp(dest.season, "Proljece") == 0 && season != SPRING) return 0;
+
+	return 1;
 }
 
-void find_best_destinations(DESTINATION* dest_array, int dest_count, float budget, char travel_option, char season) {
-	if (dest_count <= 0) {
-		printf("Nema dostupnih destinacija.\n");
-		return;
-	}
 
-	int* match_counts = (int*)calloc(dest_count, sizeof(int));
-	if (!match_counts) {
-		perror("Greska pri alokaciji memorije za match_counts");
-		return;
-	}
+void gather_user_preferences(float* budget, char* travel_options, int* season) {
+	int travel_option_choice;
 
-	for (int i = 0; i < dest_count; i++) {
-		match_counts[i] = match_criteria(dest_array[i], budget, travel_option, season);
-	}
-
-	for (int i = 0; i < 4 && i < dest_count; i++) {
-		int max_index = -1;
-		int max_value = -1;
-		for (int j = 0; j < dest_count; j++) {
-			if (match_counts[j] > max_value) {
-				max_value = match_counts[j];
-				max_index = j;
-			}
-		}
-
-		if (max_index != -1) {
-			printf("Destinacija: %s, Zemlja: %s, Kontinent: %s, Cijena: %.2f, Podudaranje kriterija: %d\n",
-				dest_array[max_index].location.name,
-				dest_array[max_index].location.country,
-				dest_array[max_index].location.continent,
-				dest_array[max_index].cost,
-				max_value);
-			match_counts[max_index] = -1; // Exclude this destination from further consideration
-		}
-	}
-
-	free(match_counts);
-}
-
-void gather_user_preferences(float* budget, char* travel_option, char* season) {
-	printf("Unesite vas budzet: ");
+	printf("Unesite svoj budzet (u eurima): ");
 	scanf("%f", budget);
 
-	printf("Unesite opciju putovanja (AU za automobil, AV za avion, V za vlak, AB za autobus): ");
-	scanf(" %c", travel_option);
+	printf("Odaberite prijevozna sredstva (unosite redom, zavrsite s 0):\n");
+	printf("1. Automobil\n");
+	printf("2. Avion\n");
+	printf("3. Vlak\n");
+	printf("4. Autobus\n");
+	travel_options[0] = '\0';
+	do {
+		printf("Unesite svoj odabir: ");
+		scanf("%d", &travel_option_choice);
+		if (travel_option_choice >= 1 && travel_option_choice <= 4) {
+			if (strlen(travel_options) > 0) {
+				strcat(travel_options, ", ");
+			}
+			switch (travel_option_choice) {
+			case CAR:
+				strcat(travel_options, "Automobil");
+				break;
+			case PLANE:
+				strcat(travel_options, "Avion");
+				break;
+			case TRAIN:
+				strcat(travel_options, "Vlak");
+				break;
+			case BUS:
+				strcat(travel_options, "Autobus");
+				break;
+			}
+		}
+	} while (travel_option_choice != 0);
 
-	printf("Unesite preferirano godisnje doba (L za ljeto, Z za zimu, J za jesen, P za proljece): ");
-	scanf(" %c", season);
+	printf("Odaberite sezonu:\n");
+	printf("1. Ljeto\n");
+	printf("2. Zima\n");
+	printf("3. Jesen\n");
+	printf("4. Proljece\n");
+	printf("Unesite svoj odabir: ");
+	scanf("%d", season);
 }
 
+void find_best_destinations(DESTINATION* dest_array, int dest_count, float budget, const char* travel_options, int season) {
+	int found = 0;
+	for (int i = 0; i < dest_count; i++) {
+		if (match_criteria(dest_array[i], budget, travel_options, season)) {
+			printf("\nID: %d\n", dest_array[i].id);
+			printf("Naziv destinacije: %s\n", dest_array[i].location.name);
+			printf("Drzava: %s\n", dest_array[i].location.country);
+			printf("Kontinent: %d\n", dest_array[i].location.continent);
+			printf("Udaljenost: %.2f\n", dest_array[i].location.distance);
+			printf("Cijena: %.2f\n", dest_array[i].cost);
+			printf("Prijevozna sredstva: %s\n", dest_array[i].travel_option);
+			printf("Sezona: %s\n", dest_array[i].season);
+			printf("Popularnost: %d\n", dest_array[i].popularity);
+			printf("Upozorenja: %s\n", dest_array[i].warnings);
+			printf("Atrakcije: %s\n", dest_array[i].attractions);
+			found = 1;
+		}
+	}
+
+	if (!found) {
+		printf("Nema destinacija koje zadovoljavaju zadane kriterije.\n");
+	}
+}
